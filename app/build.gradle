@@ -1,0 +1,61 @@
+plugins {
+    alias(libs.plugins.android.application)
+}
+
+android {
+    namespace 'com.appsbyalok.airlink'
+    compileSdk {
+        version = release(36) {
+            minorApiLevel = 1
+        }
+    }
+
+    signingConfigs {
+        release {
+            // keystore info yahan nahi balki android studio ke signed apk generator window me daaloonga
+            v1SigningEnabled false
+            v2SigningEnabled true
+        }
+    }
+
+    defaultConfig {
+        applicationId "com.appsbyalok.airlink"
+        minSdk 24
+        targetSdk 36
+        versionCode 1
+        versionName "0.1.0"
+        resConfigs "en"
+    }
+
+    buildTypes {
+        release {
+            signingConfig signingConfigs.release
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+
+    packaging {
+        resources {
+            excludes += 'META-INF/**'
+            excludes += 'META-INF/*'
+        }
+    }
+}
+
+configurations {
+    configureEach {
+        exclude group: 'org.jetbrains.kotlin'
+        exclude group: 'org.jetbrains.kotlinx'
+        exclude group: 'androidx.core', module: 'core-ktx'
+    }
+}
+dependencies {
+    implementation libs.annotation.jvm
+}

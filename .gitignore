@@ -1,0 +1,34 @@
+# Gradle files aur temporary build outputs
+.gradle/
+build/
+app/build/
+
+# Android Studio / IDEA configurations (Poori local settings block)
+.idea/
+*.iml
+.modules/
+
+# Local configuration & Secrets (Do NOT use *.properties generically)
+local.properties
+signing.properties
+private.properties
+
+# Output builds aur local generated apks
+app/release/
+app/sampledata/
+*.apk
+*.aar
+*.ap_
+*.bundle
+
+# Proguard / R8 mapping outputs (Apne optimized rules track honge, generated maps nahi)
+app/outputs/mapping/
+
+# Keystore & Signing files (Security protection)
+*.jks
+*.keystore
+*.p12
+
+# System files
+.DS_Store
+Thumbs.db

@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">AirLink</string>
+    <string name="widcondes">widcondes</string>
+    <string name="toggle_bluetooth">Toggle Bluetooth</string>
+    <string name="bluetooth_is_on">Bluetooth is ON</string>
+    <string name="ready_to_connect">Ready to connect</string>
+    <string name="open_chat">Open Chat</string>
+    <string name="chat">Chat</string>
+    <string name="app">App</string>
+    <string name="config">Config</string>
+</resources>
