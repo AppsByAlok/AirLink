@@ -130,13 +130,9 @@ public class MainActivity extends Activity implements DeviceListView.AppViewList
             );
         }
 
-        Intent serviceIntent = new Intent(this, BluetoothService.class);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            startForegroundService(serviceIntent);
-        } else {
-            startService(serviceIntent);
+        if (PermissionsHelper.hasAllPermissions(this)) {
+            startBluetoothService();
         }
-        bindService(serviceIntent, serviceConnection, Context.BIND_AUTO_CREATE);
 
         IntentFilter filter = new IntentFilter();
         filter.addAction(AppConstants.ACTION_STATE_CHANGED);
@@ -179,6 +175,18 @@ public class MainActivity extends Activity implements DeviceListView.AppViewList
         showAppView();
 
         PermissionsHelper.requestPermissions(this);
+    }
+
+    private void startBluetoothService() {
+        Intent serviceIntent = new Intent(this, BluetoothService.class);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(serviceIntent);
+        } else {
+            startService(serviceIntent);
+        }
+        if (!isBound) {
+            bindService(serviceIntent, serviceConnection, Context.BIND_AUTO_CREATE);
+        }
     }
 
     private void showAppView() {
@@ -325,6 +333,7 @@ public class MainActivity extends Activity implements DeviceListView.AppViewList
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (PermissionsHelper.hasAllPermissions(this)) {
+            startBluetoothService();
             if (deviceListView != null) deviceListView.refreshState();
         }
     }
