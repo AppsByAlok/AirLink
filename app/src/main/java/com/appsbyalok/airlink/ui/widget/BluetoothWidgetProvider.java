@@ -46,6 +46,11 @@ public class BluetoothWidgetProvider extends AppWidgetProvider {
     private void updateWidget(Context context, AppWidgetManager appWidgetManager, int widgetId) {
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
 
+        int piFlags = PendingIntent.FLAG_UPDATE_CURRENT;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            piFlags |= PendingIntent.FLAG_IMMUTABLE;
+        }
+
         boolean isEnabled = false;
         try {
             BluetoothAdapter btAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -93,13 +98,13 @@ public class BluetoothWidgetProvider extends AppWidgetProvider {
 
         // Setup "Open App" / "Chat" buttons
         Intent openAppIntent = new Intent(context, MainActivity.class);
-        PendingIntent pendingApp = PendingIntent.getActivity(context, widgetId, openAppIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+        PendingIntent pendingApp = PendingIntent.getActivity(context, widgetId, openAppIntent, piFlags);
         views.setOnClickPendingIntent(R.id.widget_btn_chat, pendingApp);
         views.setOnClickPendingIntent(R.id.widget_btn_scan, pendingApp);
 
         // Setup "Android Settings" button
         Intent settingsIntent = new Intent(android.provider.Settings.ACTION_BLUETOOTH_SETTINGS);
-        PendingIntent pendingSettings = PendingIntent.getActivity(context, widgetId, settingsIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+        PendingIntent pendingSettings = PendingIntent.getActivity(context, widgetId, settingsIntent, piFlags);
         views.setOnClickPendingIntent(R.id.widget_btn_settings, pendingSettings);
 
         // Setup Icon Toggle Logic
@@ -108,14 +113,14 @@ public class BluetoothWidgetProvider extends AppWidgetProvider {
             if (!isEnabled) {
                 Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
                 enableIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                pendingToggle = PendingIntent.getActivity(context, widgetId, enableIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+                pendingToggle = PendingIntent.getActivity(context, widgetId, enableIntent, piFlags);
             } else {
                 pendingToggle = pendingSettings; // Android 13+ forces you to open settings to turn off
             }
         } else {
             Intent toggleIntent = new Intent(context, BluetoothWidgetProvider.class);
             toggleIntent.setAction(ACTION_TOGGLE_BT);
-            pendingToggle = PendingIntent.getBroadcast(context, widgetId, toggleIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+            pendingToggle = PendingIntent.getBroadcast(context, widgetId, toggleIntent, piFlags);
         }
         views.setOnClickPendingIntent(R.id.widget_image, pendingToggle);
 

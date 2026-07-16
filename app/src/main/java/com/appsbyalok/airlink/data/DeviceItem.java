@@ -1,6 +1,7 @@
 package com.appsbyalok.airlink.data;
 
 import android.graphics.RectF;
+import android.os.Build;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
@@ -37,12 +38,18 @@ public class DeviceItem {
         addressLayout = createStaticLayout(address, subPaint, textAvailableWidth);
     }
 
+    @SuppressWarnings("deprecation")
     private StaticLayout createStaticLayout(String text, TextPaint paint, float width) {
-        return StaticLayout.Builder.obtain(text, 0, text.length(), paint, (int) width)
-                .setAlignment(Layout.Alignment.ALIGN_NORMAL)
-                .setLineSpacing(0f, 1f)
-                .setIncludePad(false)
-                .build();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            return StaticLayout.Builder.obtain(text, 0, text.length(), paint, (int) width)
+                    .setAlignment(Layout.Alignment.ALIGN_NORMAL)
+                    .setLineSpacing(0f, 1f)
+                    .setIncludePad(false)
+                    .build();
+        } else {
+            // Fallback for API 21 & 22
+            return new StaticLayout(text, paint, (int) width, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+        }
     }
 
     @Override

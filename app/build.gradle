@@ -13,14 +13,14 @@ android {
     signingConfigs {
         release {
             // keystore info yahan nahi balki android studio ke signed apk generator window me daaloonga
-            v1SigningEnabled false
+            v1SigningEnabled true
             v2SigningEnabled true
         }
     }
 
     defaultConfig {
         applicationId "com.appsbyalok.airlink"
-        minSdk 24
+        minSdk 21
         targetSdk 36
         versionCode 1
         versionName "0.1.0"

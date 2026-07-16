@@ -233,8 +233,12 @@ public class BluetoothService extends Service {
 
     private Notification buildNotification(String text) {
         Intent notificationIntent = new Intent(this, MainActivity.class);
+        int flags = PendingIntent.FLAG_UPDATE_CURRENT;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            flags |= PendingIntent.FLAG_IMMUTABLE;
+        }
         PendingIntent pendingIntent = PendingIntent.getActivity(
-                this, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE
+                this, 0, notificationIntent, flags
         );
 
         Notification.Builder builder;

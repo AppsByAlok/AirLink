@@ -42,6 +42,10 @@ public class PermissionsHelper {
      * Checks if all required permissions are already granted
      */
     public static boolean hasAllPermissions(Context context) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            // Permissions are granted at install time on Android 5.1 and lower
+            return true;
+        }
         for (String permission : getRequiredPermissions()) {
             if (context.checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) {
                 return false;
@@ -54,8 +58,10 @@ public class PermissionsHelper {
      * Requests permissions if they are not yet granted
      */
     public static void requestPermissions(Activity activity) {
-        if (!hasAllPermissions(activity)) {
-            activity.requestPermissions(getRequiredPermissions(), PERMISSION_REQUEST_CODE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (!hasAllPermissions(activity)) {
+                activity.requestPermissions(getRequiredPermissions(), PERMISSION_REQUEST_CODE);
+            }
         }
     }
 }
