@@ -5,14 +5,13 @@ plugins {
 android {
     namespace 'com.appsbyalok.airlink'
     compileSdk {
-        version = release(36) {
+        version = release(37) {
             minorApiLevel = 1
         }
     }
 
     signingConfigs {
         release {
-            // keystore info yahan nahi balki android studio ke signed apk generator window me daaloonga
             v1SigningEnabled true
             v2SigningEnabled true
         }
@@ -21,9 +20,9 @@ android {
     defaultConfig {
         applicationId "com.appsbyalok.airlink"
         minSdk 21
-        targetSdk 36
+        targetSdk 37
         versionCode 1
-        versionName "0.1.0"
+        versionName "0.1.1"
         resConfigs "en"
     }
 

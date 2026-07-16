@@ -59,6 +59,7 @@ public class DeviceListView extends View {
     // --- Active Connection State ---
     private String connectedAddress = null;
     private String connectingAddress = null;
+    private AlertDialog macDialog;
 
     // --- Paints & Styling ---
     private Paint cardPaint, iconPaint, glowPaint, indicatorPaint, ringPaint;
@@ -671,13 +672,21 @@ public class DeviceListView extends View {
     }
 
     private void showMacInputDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), android.R.style.Theme_DeviceDefault_Dialog_Alert);
+        if (macDialog != null && macDialog.isShowing()) return;
+
+        int theme = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1
+                ? android.R.style.Theme_DeviceDefault_Dialog_Alert
+                : android.R.style.Theme_Material_Dialog_Alert;
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), theme);
         builder.setTitle("Connect manually");
         builder.setMessage("Enter the exact Bluetooth MAC address (e.g. AA:11:BB:22:CC:33)");
 
-        final EditText input = new EditText(getContext());
+        final EditText input = new EditText(builder.getContext());
         input.setInputType(InputType.TYPE_CLASS_TEXT);
         input.setHint("00:00:00:00:00:00");
+        input.setHintTextColor(Color.GRAY);
+        int pad = (int) dpToPx(20);
+        input.setPadding(pad, pad, pad, pad);
         builder.setView(input);
 
         builder.setPositiveButton("Connect", (dialog, which) -> {
@@ -691,7 +700,7 @@ public class DeviceListView extends View {
             }
         });
         builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
-        builder.show();
+        macDialog = builder.show();
     }
 
     @SuppressLint("MissingPermission")
